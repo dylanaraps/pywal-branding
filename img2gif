@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+#
+# Convert the pywal logo to a gif.
+
+shopt -s nullglob
+
+colors=(
+    "#AB615FFF"
+    "#C6937CFF"
+    "#C6A898FF"
+    "#8395AAFF"
+    "#A56A9DFF"
+    "#AA667CFF"
+)
+
+mkdir -p frames || exit 1
+
+# for file in "${HOME}/projects/pywal/pywal/colorschemes/dark/"*.json; do
+for file in "${HOME}/Pictures/Wallpapers/"*; do
+    [[ "$file" == *base16* ]] && continue
+    [[ "$file" == *dkeg* ]] && continue
+    wal -i "$file" --backend wal
+    # wal --theme "$file"
+    source ~/.cache/wal/colors.sh || exit 1
+    rm ./frames/logo.png 2>/dev/null
+    cp logo.png ./frames/
+
+    palette=(
+        "$color1"
+        "$color2"
+        "$color3"
+        "$color4"
+        "$color5"
+        "$color6"
+    )
+
+    for i in {0..6}; do
+        mogrify \
+            -fuzz "5%" \
+            -fill "${palette[$i]^^}" \
+            -opaque "${colors[$i]^^}" \
+            ./frames/logo.png
+    done
+
+    mv ."/frames/logo.png" ."/frames/${file##*/}".png
+done
