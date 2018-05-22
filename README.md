@@ -1,4 +1,4 @@
-# Neofetch Branding
+# pywal Branding
 
 ![](big.png)
 ![](big-with-text.png)
